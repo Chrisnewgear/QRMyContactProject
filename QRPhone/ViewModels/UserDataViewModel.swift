@@ -44,7 +44,9 @@ class UserDataViewModel: ObservableObject{
     }
 
     func generateQRCode() -> Data? {
-        qrCodeService.generateQRCode(from: userData.phoneNumber)
+        // Encode all user data in the QR code: firstName\nlastName\nphoneNumber\nemail
+        let qrData = "\(userData.firstName)\n\(userData.lastName)\n\(userData.phoneNumber)\n\(userData.email ?? "")"
+        return qrCodeService.generateQRCode(from: qrData)
     }
     
 }
