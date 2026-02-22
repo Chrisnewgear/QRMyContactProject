@@ -23,28 +23,41 @@ struct QRScannerView: View {
             CameraView(scannedCode: $scannedCode)
                 .edgesIgnoringSafeArea(.all)
             
+            // Scanner Overlay
             VStack {
                 HStack {
-                    Button("Cerrar") {
+                    Button(action: {
                         dismiss()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.white)
+                            .shadow(radius: 4)
+                            .padding()
                     }
-                    .padding()
-                    .background(Color.black.opacity(0.7))
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    
                     Spacer()
                 }
-                .padding()
                 
                 Spacer()
+                
+                // Viewfinder
+                ZStack {
+                    RoundedRectangle(cornerRadius: 3)
+                        .stroke(Color.white, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round, dash: [60, 190], dashPhase: 0))
+                        .frame(width: 250, height: 250)
+                    
+                    RoundedRectangle(cornerRadius: 3)
+                        .stroke(Color.white, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round, dash: [60, 190], dashPhase: 125))
+                        .frame(width: 250, height: 250)
+                }
+                .shadow(color: .black.opacity(0.5), radius: 5)
                 
                 Text("Escanea un código QR")
                     .font(.headline)
                     .padding()
-                    .background(Color.black.opacity(0.7))
-                    .foregroundColor(.white)
+                    .background(Material.ultraThinMaterial)
                     .cornerRadius(10)
+                    .padding(.top, 20)
                     .padding(.bottom, 50)
             }
         }

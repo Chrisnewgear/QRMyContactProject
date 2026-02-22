@@ -20,17 +20,23 @@ struct ContactViewController: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Información de Contacto")) {
-                    HStack {
+            ZStack {
+                Color.qrBackground.ignoresSafeArea()
+                
+                VStack(spacing: 24) {
+                    // Contact Header
+                    VStack(spacing: 16) {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
-                            .frame(width: 60, height: 60)
+                            .frame(width: 90, height: 90)
                             .foregroundColor(.blue)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .shadow(color: .black.opacity(0.1), radius: 5)
                         
-                        VStack(alignment: .leading) {
+                        VStack(spacing: 4) {
                             Text("\(contact.givenName) \(contact.familyName)")
-                                .font(.title2)
+                                .font(.title)
                                 .fontWeight(.bold)
                             
                             if !contact.organizationName.isEmpty {
@@ -39,43 +45,71 @@ struct ContactViewController: View {
                                     .foregroundColor(.secondary)
                             }
                         }
-                        .padding(.leading)
                     }
-                    .padding(.vertical)
-                }
-                
-                Section(header: Text("Detalles")) {
-                    if !contact.phoneNumbers.isEmpty {
-                        let firstPhone = contact.phoneNumbers[0]
-                        HStack {
-                            Image(systemName: "phone.fill")
-                                .foregroundColor(.green)
-                                .frame(width: 24)
-                            Text(firstPhone.value.stringValue)
-                        }
-                    }
+                    .padding(.top, 20)
                     
-                    if !contact.emailAddresses.isEmpty {
-                        let firstEmail = contact.emailAddresses[0]
-                        HStack {
-                            Image(systemName: "envelope.fill")
-                                .foregroundColor(.blue)
-                                .frame(width: 24)
-                            Text(firstEmail.value as String)
+                    // Details Card
+                    VStack(alignment: .leading, spacing: 20) {
+                        if !contact.phoneNumbers.isEmpty {
+                            HStack(spacing: 16) {
+                                Image(systemName: "phone.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white)
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.green)
+                                    .clipShape(Circle())
+                                
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Móvil")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(contact.phoneNumbers[0].value.stringValue)
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                }
+                            }
+                        }
+                        
+                        if !contact.emailAddresses.isEmpty {
+                            Divider()
+                            
+                            HStack(spacing: 16) {
+                                Image(systemName: "envelope.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white)
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.blue)
+                                    .clipShape(Circle())
+                                
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Email")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(contact.emailAddresses[0].value as String)
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                }
+                            }
                         }
                     }
-                }
-                
-                Section {
+                    .padding(20)
+                    .background(Color.qrCard)
+                    .cornerRadius(16)
+                    .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+                    .padding(.horizontal)
+                    
+                    Spacer()
+                    
                     Button(action: saveContact) {
                         HStack {
-                            Spacer()
+                            Image(systemName: "person.crop.circle.badge.plus")
                             Text("Guardar en Contactos")
                                 .fontWeight(.bold)
-                                .foregroundColor(.blue)
-                            Spacer()
                         }
                     }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
             }
             .navigationTitle("Nuevo Contacto")

@@ -11,13 +11,18 @@ struct ContentView: View{
     @StateObject private var viewModel = UserDataViewModel()
     
     var body: some View{
-        VStack{
+        ZStack {
+            Color.qrBackground.ignoresSafeArea()
+            
             if viewModel.isDataSaved{
                 QRDisplayView(viewModel: viewModel)
+                    .transition(.opacity.combined(with: .scale))
             }else{
                 UserFormView(viewModel: viewModel)
+                    .transition(.opacity.combined(with: .scale))
             }
         }
+        .animation(.spring(), value: viewModel.isDataSaved)
     }
 }
 
