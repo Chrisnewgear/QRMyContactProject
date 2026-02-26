@@ -24,16 +24,16 @@ struct UserFormView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 80, height: 80)
-                        .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.qrGradientStart, .qrGradientEnd]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .foregroundColor(.white)
                     
                     Text("Crea tu código QR")
                         .font(.largeTitle)
                         .bold()
-                        .foregroundColor(.primary)
+                        .foregroundColor(.white)
                     
                     Text("Tus datos se codificarán en un QR para que otros puedan escanearte fácilmente.")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white.opacity(0.8))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
@@ -82,7 +82,6 @@ struct UserFormView: View {
             }
             .padding()
         }
-        .background(Color.qrBackground.ignoresSafeArea())
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -108,12 +107,13 @@ struct CustomTextField: View {
             
             TextField(title, text: $text)
                 .keyboardType(keyboardType)
+                .tint(.qrDeepBlue)
                 .if(keyboardType == .emailAddress) { view in
                     view.textInputAutocapitalization(.never)
                 }
         }
         .padding()
-        .background(Color(UIColor.systemBackground))
+        .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)

@@ -21,7 +21,8 @@ struct ContactViewController: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.qrBackground.ignoresSafeArea()
+                LinearGradient(gradient: Gradient(colors: [.qrGradientStart, .qrGradientEnd]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    .ignoresSafeArea()
                 
                 VStack(spacing: 24) {
                     // Contact Header
@@ -29,7 +30,7 @@ struct ContactViewController: View {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .frame(width: 90, height: 90)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.qrPrimary)
                             .background(Color.white)
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.1), radius: 5)
@@ -38,11 +39,12 @@ struct ContactViewController: View {
                             Text("\(contact.givenName) \(contact.familyName)")
                                 .font(.title)
                                 .fontWeight(.bold)
+                                .foregroundColor(.white)
                             
                             if !contact.organizationName.isEmpty {
                                 Text(contact.organizationName)
                                     .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.white.opacity(0.8))
                             }
                         }
                     }
@@ -56,7 +58,7 @@ struct ContactViewController: View {
                                     .font(.system(size: 20))
                                     .foregroundColor(.white)
                                     .frame(width: 40, height: 40)
-                                    .background(Color.green)
+                                    .background(Color.qrLimeGreen)
                                     .clipShape(Circle())
                                 
                                 VStack(alignment: .leading, spacing: 2) {
@@ -78,7 +80,7 @@ struct ContactViewController: View {
                                     .font(.system(size: 20))
                                     .foregroundColor(.white)
                                     .frame(width: 40, height: 40)
-                                    .background(Color.blue)
+                                    .background(Color.qrDeepBlue)
                                     .clipShape(Circle())
                                 
                                 VStack(alignment: .leading, spacing: 2) {
@@ -119,11 +121,13 @@ struct ContactViewController: View {
                     Button("Cancelar") {
                         dismiss()
                     }
+                    .foregroundColor(.white)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Guardar") {
                         saveContact()
                     }
+                    .foregroundColor(.white)
                     .fontWeight(.bold)
                 }
             }

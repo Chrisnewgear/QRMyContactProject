@@ -17,6 +17,7 @@ struct QRScannerView: View {
     @Environment(\.dismiss) var dismiss
     @State private var scannedCode: String?
     @State private var contactWrapper: ContactWrapper?
+    @State private var showInvalidQRAlert = false
 
     var body: some View {
         ZStack {
@@ -81,6 +82,11 @@ struct QRScannerView: View {
                 dismiss()
             }
         }
+        .alert("Código QR invalido", isPresented: $showInvalidQRAlert){
+            Button("OK", role: .cancel) {}
+        }message: {
+            Text("Este código QR no contiene información de contacto válida.")
+        }
     }
     
     private func checkContactsPermission() {
@@ -103,6 +109,8 @@ struct QRScannerView: View {
         
         guard components.count >= 3 else {
             print("❌ Not enough components. Expected at least 3, got \(components.count)")
+            showInvalidQRAlert = true
+            scannedCode = nil
             return
         }
 

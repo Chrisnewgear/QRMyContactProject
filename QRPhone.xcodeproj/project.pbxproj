@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		26D266602F4B586100A397E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26D2665F2F4B586100A397E5 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		26CAC9F22F43599700050E47 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,14 +31,20 @@
 		26CAC9E42F43599500050E47 /* QRPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26CAC9F12F43599700050E47 /* QRPhoneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QRPhoneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		26CAC9FB2F43599700050E47 /* QRPhoneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QRPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		26D2665F2F4B586100A397E5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		26CAC9E62F43599500050E47 /* QRPhone */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = QRPhone;
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		264ED8532F4B7E6400DD5D14 /* Exceptions for "QRPhone" folder in "QRPhone" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 26CAC9E32F43599500050E47 /* QRPhone */;
 		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		26CAC9F42F43599700050E47 /* QRPhoneTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = QRPhoneTests;
@@ -43,6 +53,14 @@
 		26CAC9FE2F43599700050E47 /* QRPhoneUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = QRPhoneUITests;
+			sourceTree = "<group>";
+		};
+		26D2669C2F4B5CD000A397E5 /* QRPhone */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				264ED8532F4B7E6400DD5D14 /* Exceptions for "QRPhone" folder in "QRPhone" target */,
+			);
+			path = QRPhone;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +93,8 @@
 		26CAC9DB2F43599500050E47 = {
 			isa = PBXGroup;
 			children = (
-				26CAC9E62F43599500050E47 /* QRPhone */,
+				26D2665F2F4B586100A397E5 /* LaunchScreen.storyboard */,
+				26D2669C2F4B5CD000A397E5 /* QRPhone */,
 				26CAC9F42F43599700050E47 /* QRPhoneTests */,
 				26CAC9FE2F43599700050E47 /* QRPhoneUITests */,
 				26CAC9E52F43599500050E47 /* Products */,
@@ -108,7 +127,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				26CAC9E62F43599500050E47 /* QRPhone */,
+				26D2669C2F4B5CD000A397E5 /* QRPhone */,
 			);
 			name = QRPhone;
 			packageProductDependencies = (
@@ -212,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26D266602F4B586100A397E5 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +420,7 @@
 				DEVELOPMENT_TEAM = 8AL2D2QKW7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QRPhone/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesitamos acceso a la cámara para escanear códigos QR";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Necesitamos acceso a tus contactos para guardar la información escaneada";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -434,6 +455,7 @@
 				DEVELOPMENT_TEAM = 8AL2D2QKW7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QRPhone/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesitamos acceso a la cámara para escanear códigos QR";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Necesitamos acceso a tus contactos para guardar la información escaneada";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

@@ -13,7 +13,7 @@ struct QRDisplayView: View {
     
     var body: some View {
         ZStack {
-            Color.qrBackground.ignoresSafeArea()
+            // Background is provided by parent view
             
             VStack(spacing: 25) {
                 // Header
@@ -22,9 +22,10 @@ struct QRDisplayView: View {
                         Text("Tu Tarjeta QR")
                             .font(.largeTitle)
                             .bold()
+                            .foregroundColor(.white)
                         Text("Comparte tu contacto fácilmente")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.8))
                     }
                     Spacer()
                     // More subtle edit button
@@ -33,7 +34,7 @@ struct QRDisplayView: View {
                     }) {
                         Image(systemName: "pencil.circle.fill")
                             .font(.system(size: 30))
-                            .foregroundColor(.blue)
+                            .foregroundColor(.white)
                     }
                 }
                 .padding(.horizontal)
@@ -45,7 +46,7 @@ struct QRDisplayView: View {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .frame(width: 50, height: 50)
-                            .foregroundColor(.blue.opacity(0.8))
+                            .foregroundColor(Color.qrPrimary.opacity(0.8))
                         
                         VStack(alignment: .leading) {
                             Text("\(viewModel.userData.firstName) \(viewModel.userData.lastName)")
@@ -113,7 +114,7 @@ struct QRDisplayView: View {
                 Button("Eliminar mis datos", role: .destructive) {
                     viewModel.showAlert = true
                 }
-                .font(.footnote)
+                .font(.headline)
                 .padding(.bottom)
             }
         }
@@ -125,6 +126,8 @@ struct QRDisplayView: View {
         } message: {
             Text("Esta acción borrará tu tarjeta y no se puede deshacer.")
         }
+        .tint(.qrPrimary)
+        .colorScheme(.light)
     }
     
     func shareQRCode(image: UIImage) {

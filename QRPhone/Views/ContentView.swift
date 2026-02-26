@@ -12,7 +12,8 @@ struct ContentView: View{
     
     var body: some View{
         ZStack {
-            Color.qrBackground.ignoresSafeArea()
+            LinearGradient(gradient: Gradient(colors: [.qrGradientStart, .qrGradientEnd]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                .ignoresSafeArea()
             
             if viewModel.isDataSaved{
                 QRDisplayView(viewModel: viewModel)
