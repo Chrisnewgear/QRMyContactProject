@@ -162,15 +162,14 @@ struct ContactViewController: View {
                             let existingContacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
                             
                             if !existingContacts.isEmpty {
-                                let existing = existingContacts[0]
                                 self.alertTitle = "Contacto Existente"
-                                self.alertMessage = "Este número ya está guardado como: \(existing.givenName) \(existing.familyName)"
+                                self.alertMessage = "Este número ya está guardado en tus contactos."
                                 self.showingAlert = true
                                 return
                             }
                         }
                     } catch {
-                        print("Error checking duplicates: \(error.localizedDescription)")
+                        print("⚠️ Error checking for duplicate contacts")
                     }
 
                     // 2. Save Contact
@@ -184,7 +183,7 @@ struct ContactViewController: View {
                         showingAlert = true
                     } catch {
                         alertTitle = "Error"
-                        alertMessage = "No se pudo guardar el contacto: \(error.localizedDescription)"
+                        alertMessage = "No se pudo guardar el contacto. Intenta de nuevo."
                         showingAlert = true
                     }
                 } else {

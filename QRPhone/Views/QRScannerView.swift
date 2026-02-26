@@ -90,59 +90,101 @@ struct QRScannerView: View {
     }
     
     private func checkContactsPermission() {
-        let store = CNContactStore()
-        store.requestAccess(for: .contacts) { granted, error in
-            if granted {
-                print("✅ Contacts permission confirmed on appear")
-            } else {
-                print("❌ Contacts permission check failed: \(error?.localizedDescription ?? "unknown")")
-            }
-        }
+        let status = CNContactStore.authorizationStatus(for: .contacts)
+        // Only request access if the user hasn't been asked yet
+        guard status == .notDetermined else { return }
+        CNContactStore().requestAccess(for: .contacts) { _, _ in }
     }
 
+    // MARK: - Input Sanitization & Validation
+
+    /// Trims whitespace/newlines and enforces a maximum character length.
+    private func sanitize(_ input: String, maxLength: Int = 100) -> String {
+        String(input.trimmingCharacters(in: .whitespacesAndNewlines).prefix(maxLength))
+    }
+
+    /// Allows only characters valid in a phone number: digits, +, spaces, (, ), -.
+    private func isValidPhoneNumber(_ phone: String) -> Bool {
+        let allowed = CharacterSet(charactersIn: "+0123456789 ()-")
+        return !phone.isEmpty && phone.unicodeScalars.allSatisfy { allowed.contains($0) }
+    }
+
+    /// RFC 5321/5322 email format check.
+    private func isValidEmail(_ email: String) -> Bool {
+        let regex = #"^[A-Z0-9a-z._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"#
+        return email.range(of: regex, options: .regularExpression) != nil
+    }
+
+    // MARK: - QR Processing
+
     private func processScannedCode(_ code: String) {
-        print("🔍 Scanned QR Code: \(code)")
-        
-        let components = code.components(separatedBy: "\n")
-        print("📦 Components count: \(components.count)")
-        print("📦 Components: \(components)")
-        
-        guard components.count >= 3 else {
-            print("❌ Not enough components. Expected at least 3, got \(components.count)")
+        // Do NOT log raw QR content — it contains PII
+        print("🔍 QR code received, processing...")
+
+        // Reject excessively long payloads before any further processing
+        guard code.count <= 500 else {
+            print("❌ QR payload exceeds maximum allowed length")
             showInvalidQRAlert = true
             scannedCode = nil
             return
         }
 
-        let firstName = components[0]
-        let lastName = components[1]
-        let phoneNumber = components[2]
-        let email = components.count > 3 && !components[3].isEmpty ? components[3] : nil
+        let components = code.components(separatedBy: "\n")
 
-        print("👤 Creating contact: \(firstName) \(lastName), Phone: \(phoneNumber), Email: \(email ?? "none")")
+        guard components.count >= 3 else {
+            print("❌ QR payload has too few fields (\(components.count))")
+            showInvalidQRAlert = true
+            scannedCode = nil
+            return
+        }
+
+        let firstName   = sanitize(components[0])
+        let lastName    = sanitize(components[1])
+        let phoneNumber = sanitize(components[2], maxLength: 20)
+
+        guard !firstName.isEmpty, !lastName.isEmpty else {
+            print("❌ Name fields are empty after sanitization")
+            showInvalidQRAlert = true
+            scannedCode = nil
+            return
+        }
+
+        guard isValidPhoneNumber(phoneNumber) else {
+            print("❌ Phone number failed validation")
+            showInvalidQRAlert = true
+            scannedCode = nil
+            return
+        }
+
+        var validatedEmail: String? = nil
+        if components.count > 3 {
+            let rawEmail = sanitize(components[3], maxLength: 254)
+            if !rawEmail.isEmpty {
+                guard isValidEmail(rawEmail) else {
+                    print("❌ Email failed validation")
+                    showInvalidQRAlert = true
+                    scannedCode = nil
+                    return
+                }
+                validatedEmail = rawEmail
+            }
+        }
 
         let contact = CNMutableContact()
         contact.givenName = firstName
         contact.familyName = lastName
-
-        let phoneNumberValue = CNLabeledValue(
-            label: CNLabelPhoneNumberMobile,
-            value: CNPhoneNumber(stringValue: phoneNumber)
-        )
-        contact.phoneNumbers = [phoneNumberValue]
-        
-        // Add email if available
-        if let email = email {
-            let emailValue = CNLabeledValue(
-                label: CNLabelHome,
-                value: email as NSString
-            )
-            contact.emailAddresses = [emailValue]
+        contact.phoneNumbers = [
+            CNLabeledValue(label: CNLabelPhoneNumberMobile,
+                           value: CNPhoneNumber(stringValue: phoneNumber))
+        ]
+        if let email = validatedEmail {
+            contact.emailAddresses = [
+                CNLabeledValue(label: CNLabelHome, value: email as NSString)
+            ]
         }
 
-        // Show the contact details immediately
         contactWrapper = ContactWrapper(contact: contact)
-        print("✅ Contact created, showing contact view")
+        print("✅ Contact created successfully")
     }
 }
 

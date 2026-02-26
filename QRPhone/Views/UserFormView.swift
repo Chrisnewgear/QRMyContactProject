@@ -43,18 +43,30 @@ struct UserFormView: View {
                 VStack(spacing: 16) {
                     CustomTextField(icon: "person.fill", title: "Nombre", text: $viewModel.userData.firstName)
                         .focused($focusedField, equals: .firstName)
-                    
+                        .onChange(of: viewModel.userData.firstName) { v in
+                            if v.count > 100 { viewModel.userData.firstName = String(v.prefix(100)) }
+                        }
+
                     CustomTextField(icon: "person.fill", title: "Apellido", text: $viewModel.userData.lastName)
                         .focused($focusedField, equals: .lastName)
-                    
+                        .onChange(of: viewModel.userData.lastName) { v in
+                            if v.count > 100 { viewModel.userData.lastName = String(v.prefix(100)) }
+                        }
+
                     CustomTextField(icon: "phone.fill", title: "Número de teléfono", text: $viewModel.userData.phoneNumber, keyboardType: .numberPad)
                         .focused($focusedField, equals: .phoneNumber)
-                    
+                        .onChange(of: viewModel.userData.phoneNumber) { v in
+                            if v.count > 20 { viewModel.userData.phoneNumber = String(v.prefix(20)) }
+                        }
+
                     CustomTextField(icon: "envelope.fill", title: "Email (opcional)", text: Binding(
                         get: { viewModel.userData.email ?? "" },
                         set: { viewModel.userData.email = $0.isEmpty ? nil : $0 }
                     ), keyboardType: .emailAddress)
                         .focused($focusedField, equals: .email)
+                        .onChange(of: viewModel.userData.email ?? "") { v in
+                            if v.count > 254 { viewModel.userData.email = String(v.prefix(254)) }
+                        }
                 }
                 .padding()
                 .background(Color.qrCard)
@@ -77,6 +89,14 @@ struct UserFormView: View {
                          viewModel.userData.firstName.isEmpty ||
                          viewModel.userData.lastName.isEmpty)
                 .padding(.horizontal)
+
+                if let error = viewModel.validationError {
+                    Text(error)
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
                 
                 Spacer()
             }
